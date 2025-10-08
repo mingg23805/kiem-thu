@@ -2,22 +2,31 @@ from loan import check_loan
 import unittest
 
 class TestCheckLoan(unittest.TestCase):
-    def test_tc1_invalid_age(self):
-        # Path: 1(T)
-        self.assertEqual(check_loan(-1, 1000000), "Không hợp lệ")
 
-    def test_tc2_age_under_18(self):
-        # Path: 1(F) → 2(T)
-        self.assertEqual(check_loan(17, 4000000), "Không đủ điều kiện")
+    # TP1: 0 → 1 → (2)T → 3 → 7 → E
+    def test_TC1_age_negative(self):
+        self.assertEqual(check_loan(-1, 5000000), "Không hợp lệ")
 
-    def test_tc3_income_under_3m(self):
-        # Path: 1(F) → 2(F) → 3(T)
-        self.assertEqual(check_loan(40, 2000000), "Không đủ điều kiện")
+    # TP1: 0 → 1 → (2)T → 3 → 7 → E
+    def test_TC5_income_negative(self):
+        self.assertEqual(check_loan(30, -1), "Không hợp lệ")
 
-    def test_tc4_eligible(self):
-        # Path: 1(F) → 2(F) → 3(F)
-        self.assertEqual(check_loan(30, 4000000), "Đủ điều kiện")
+    # TP2: 0 → 1 → (2)F → (4)T → 5 → 7 → E
+    def test_TC2_age_less_than_18(self):
+        self.assertEqual(check_loan(17, 5000000), "Không đủ điều kiện")
+
+    # TP2: 0 → 1 → (2)F → (4)T → 5 → 7 → E
+    def test_TC3_income_less_than_3m(self):
+        self.assertEqual(check_loan(30, 2000000), "Không đủ điều kiện")
+
+    # TP2: 0 → 1 → (2)F → (4)T → 5 → 7 → E
+    def test_TC6_age_greater_than_60(self):
+        self.assertEqual(check_loan(65, 4000000), "Không đủ điều kiện")
+
+    # TP3: 0 → 1 → (2)F → (4)F → 6 → 7 → E
+    def test_TC4_valid(self):
+        self.assertEqual(check_loan(30, 5000000), "Đủ điều kiện")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
